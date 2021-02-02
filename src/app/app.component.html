@@ -1,0 +1,157 @@
+
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img
+    width="40px"
+    alt="Angular Logo"
+    src="assets/logo.jpg"
+  />
+
+</div>
+
+<div class="content" role="main">
+
+
+  <div class="card-container">
+
+      <div class="left-panel">
+        <div class="panel-text">
+          <h3 class="text-center" style="width: 100%">
+            <img class="refresh-icon" src="assets/icons/arrows.png"/>
+            Make a transfer
+          </h3>
+        </div>
+        <div class="transfer-container">
+          <form action="" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="item-transfer">
+              <p>FROM ACCOUNT</p>
+              <input type="text" [(ngModel)]="fromAccount" formControlName="fromAccount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fromAccount.errors }" />
+              <div *ngIf="submitted && f.fromAccount.errors" class="invalid-feedback">
+                <div *ngIf="f.fromAccount.errors.required">This field is required</div>
+              </div>
+            </div>
+            <div class="item-transfer">
+              <p>TO ACCOUNT</p>
+              <input type="text" [(ngModel)]="toAccount" formControlName="toAccount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.toAccount.errors }" />
+              <div *ngIf="submitted && f.toAccount.errors" class="invalid-feedback">
+                <div *ngIf="f.toAccount.errors.required">This field is required</div>
+              </div>
+            </div>
+            <div class="item-transfer">
+              <p>AMOUNT</p>
+              <input type="number" [(ngModel)]="amountTrans" placeholder="$ 0.00" formControlName="amountTrans" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.amountTrans.errors }"/>
+              <div *ngIf="submitted && f.amountTrans.errors" class="invalid-feedback">
+                <div *ngIf="f.amountTrans.errors.required">This field is required</div>
+              </div>
+            </div>
+            <div class="item-transfer">
+              <button class="btn-send" type="submit">SUBMIT</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="right-panel">
+        <div class="panel-text-right">
+
+          <!--<span class="briefcase"></span>-->
+          <h3 class="text-center" style="width: 100%">
+            <img class="refresh-icon" src="assets/icons/briefcase.png"/>
+            Make a transfer
+          </h3>
+        </div>
+        <div class="panel-search">
+
+            <!--<input type="search"  placeholder="Search" [(ngModel)]="searchInput" (keyup)="setFilter($event)">-->
+          <div class="search-wrapper">
+            <form>
+              <input [(ngModel)]="searchInput" (keyup)="setFilter($event)" type="text" name="focus" required class="search-box" placeholder="Enter search term" />
+              <button class="close-icon" type="reset" (click)="clean()"></button>
+            </form>
+          </div>
+
+          <div class="c-btn-group">
+            <a class="c-btn" (click)="OrderColumn($event,'date')">
+              DATE
+              <i class="sort-by-desc" *ngIf="dateOrder==='desc'"></i>
+              <i class="sort-by-asc"  *ngIf="dateOrder==='asc'"></i>
+            </a>
+            <a class="c-btn" (click)="OrderColumn($event,'name')">
+              BENEFICIARY
+              <i class="sort-by-desc" *ngIf="benOrder==='desc'"></i>
+              <i class="sort-by-asc" *ngIf="benOrder==='asc'"></i>
+            </a>
+            <a class="c-btn" (click)="OrderColumn($event,'amount')">
+              AMOUNT
+              <i class="sort-by-desc" *ngIf="amoOrder==='desc'"></i>
+              <i class="sort-by-asc" *ngIf="amoOrder==='asc'"></i>
+            </a>
+          </div>
+        </div>
+        <table class="transfer-table" width="100%" border="1" cellpadding="0" cellspacing="1" bordercolor="#000000" style="border-collapse:collapse;border-color:#ddd;">
+          <thead></thead>
+          <tbody>
+          <tr *ngFor="let product of transactionList | myfilter : filterargs">
+            <td width="2%" [ngStyle]="{'background-color': product.color }">
+              <span style="width: 3px; height: 100%;" [ngStyle]="{'background-color': product.color }"></span>
+            </td>
+            <td width="14%">{{formatDate(product.date)}}</td>
+            <td width="14%">
+              <img height="30px" src="{{getImage(product.name)}}" alt=""/>
+            </td>
+            <td width="60%" class="text-left">
+              <h4><p>{{product.name}}</p></h4>
+              <p>{{product.transactionType}}</p>
+            </td>
+            <td width="10%">
+              <h4>-${{product.amount}}</h4>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+    <!--<a class="card" target="_blank" rel="noopener" href="https://angular.io/tutorial">-->
+      <!--</a>-->
+
+    <!--<a class="card" target="_blank" rel="noopener" href="https://angular.io/cli">-->
+         <!--</a>-->
+
+    <!--<a class="card" target="_blank" rel="noopener" href="https://blog.angular.io/">-->
+         <!--</a>-->
+
+  </div>
+
+  <div class="card-container">
+
+  </div>
+
+
+
+  <!-- Links -->
+  <div class="card-container">
+
+  </div>
+  <!-- The Modal -->
+  <div id="myModal" class="modal" *ngIf="showModal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h1>Transaction Details</h1>
+      <p>From Account: <b>{{fromAccount}}</b></p>
+      <p>To Account: <b>{{toAccount}}</b></p>
+      <p>Amount: <b>${{amountTrans}}</b></p>
+      <div class="item-transfer">
+        <button (click)="sendTransaction($event)" class="btn-send" type="submit">Send Transaction</button>
+      </div>
+    </div>
+
+  </div>
+  <!-- Footer -->
+  <footer>
+
+  </footer>
+</div>
+
+<router-outlet></router-outlet>
